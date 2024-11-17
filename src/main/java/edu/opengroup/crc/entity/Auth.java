@@ -24,13 +24,6 @@ public class Auth {
     private String email;
     @Column(name = "HASH_SENHA")
     private String hashSenha;
-//    @Column(name = "ULTIMO_LOGIN")
-//    private LocalDateTime ultimoLogin;
-//    @ManyToMany(fetch = FetchType.EAGER)
-//    @JoinTable(name = "T_OP_ASSOCIACAO_AUTH_ROLE",
-//            joinColumns = @JoinColumn(name = "id_auth"),
-//            inverseJoinColumns = @JoinColumn(name = "id_role"))
-//    private Set<Role> roles = new HashSet<>();
     @Enumerated(EnumType.STRING)
     @Column(name = "ROLE")
     private Role role;

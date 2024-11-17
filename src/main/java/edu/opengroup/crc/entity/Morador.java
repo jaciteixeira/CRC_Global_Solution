@@ -28,5 +28,19 @@ public class Morador {
     private Integer qtdMoradores;
     @Column(name = "identificadorRes")
     private String identificadorRes;
+//    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.REFRESH})
+//    @JoinColumn(
+//            name = "ID_CONSUMO",
+//            referencedColumnName = "ID_CONSUMO",
+//            foreignKey = @ForeignKey(name = "FK_MORADOR_CONSUMO")
+//    )
+//    private ConsumoMensal consumoMensal;
+    @OneToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinColumn(
+            name = "ID_AUTH",
+            referencedColumnName = "ID_AUTH",
+            foreignKey = @ForeignKey(name = "FK_AUTH_MORDADOR")
+    )
+    private Auth auth;
 }
-// TODO: quando o morador enviar o a fatura menor que do mes anterior ganha 100 pontos, maior ganha 50 
+// TODO: quando o morador enviar o a fatura(CONSUMO MENSAL) menor que do mes anterior ganha 100 pontos, maior ganha 50
