@@ -26,7 +26,7 @@ public class ConsumoMensal {
     private LocalDateTime data;
     @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(
-            name = "ID_MORADR",
+            name = "ID_MORADOR",
             referencedColumnName = "ID_MORADOR",
             foreignKey = @ForeignKey(name = "FK_CONSUMO_MORADOR")
     )

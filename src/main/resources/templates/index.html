@@ -1,0 +1,42 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml"
+      lang="pt-br">
+
+<head >
+  <div th:replace="~{fragments::head(#{index.title})}"></div>
+  <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
+</head>
+
+<body>
+<!-- Header Placeholder -->
+<header th:replace="~{fragments::header('/')}"></header>
+<div sec:authorize="isAuthenticated()">
+  This content is only shown to authenticated users.
+</div>
+
+<!-- Main Content -->
+<div class="container my-5">
+  <div class="text-center mb-4">
+    <h1 th:text="#{welcome}" class="display-4 text-primary">Bem vindo a CRC</h1>
+    <h5 th:text="#{slogan}" class="font-italic mt-4">Monitoramento e Otimização do Consumo de Energia para Condomínios e Prédios
+    </h5>
+    <h3 th:text="#{what_is}" class="text-secondary mt-3">O que é a CRC?</h3>
+    <p th:text="#{introdution}" class="text-muted mt-3">
+      A solução permite que os residentes registrem suas faturas de energia elétrica mensalmente. Com base no consumo, a plataforma calcula a eficiência energética de cada morador e atribui pontos conforme os esforços de economia. Esses pontos podem ser acumulados e, posteriormente, resgatados por meio de benefícios disponibilizados pelo condomínio, como descontos em taxas condominiais, acesso a espaços de lazer ou participação em sorteios de itens sustentáveis. A plataforma também inclui um painel para o condomínio, onde os administradores podem monitorar o desempenho geral, registrar os benefícios disponíveis e incentivar práticas sustentáveis entre os moradores, criando um ciclo de conscientização e recompensas que beneficia toda a comunidade. Essa iniciativa visa reduzir o consumo de energia, promover a sustentabilidade e fortalecer a colaboração entre os moradores em prol de um futuro mais verde.
+    </p>
+  </div>
+
+  <div class="d-flex justify-content-center mt-4">
+    <a th:text="#{new_user}" href="/novo_usuario" class="btn btn-success btn-lg mr-3">Cadastrar Novo Usuário</a>
+    <a th:text="#{login}" href="/login" class="btn btn-outline-info btn-lg">Login</a>
+  </div>
+</div>
+<footer th:replace="~{fragments::footer}"></footer>
+
+<!-- Optional JavaScript -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.4.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>

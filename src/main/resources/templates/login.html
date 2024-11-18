@@ -1,0 +1,61 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="pt-br">
+
+<head th:replace="~{fragments::head(#{login.title})}"></head>
+
+<body>
+<!-- Header Placeholder -->
+<header th:replace="~{fragments::header('login')}"></header>
+
+<div class="container mt-5">
+  <h2>Login</h2>
+
+  <div th:if="${successMessage}" class="alert alert-success" role="alert">
+    <span th:text="#{success.cadastro}"></span>
+  </div>
+
+  <form th:action="@{/login}" method="post">
+
+    <span th:text="#{login.email}">Usuário:</span> <input class="form-control" type="text" id="username"
+                                                    name="username"><br>
+    <span th:text="#{login.password}">Senha:</span> <input class="form-control"
+                                                     type="password" id="password" name="password"><br>
+
+    <div th:if="${error_user_not_found}">
+      <p class="alert alert-warning"><span th:text="#{login.usernotfound}">Usuário não encontrado</span></p>
+    </div>
+    <div th:if="${error_user_inactive}">
+      <p class="alert alert-warning">
+        <span th:text="#{login.userinactive}">Conta desativada
+          <a th:href="@{/activate-account}" th:text="#{login.active}"></a>
+        </span>
+      </p>
+    </div>
+
+    <div th:if="${param.erro}">
+      <p class="alert alert-danger"><span th:text="#{login.error}">Usuário ou senha incorreto!</span></p>
+    </div>
+
+    <div th:if="${param.logout}">
+      <p class="alert alert-success"><span th:text="#{msg.logout}"> Você saiu com sucesso</span></p>
+    </div>
+
+    <button type="submit"><span th:text="#{login.submit}">Entrar</span></button>
+
+
+  </form>
+
+  <div class="row">
+    <span th:text="#{login.not_account}">Não tem conta? </span>
+    <a th:text="#{login.register}" href="/new-user"> Registrar</a>
+  </div>
+  <div class="row">
+    <a href="/" th:text="#{login.return}">Retorne para a página inicial</a>
+  </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

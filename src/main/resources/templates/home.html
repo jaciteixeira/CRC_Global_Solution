@@ -1,0 +1,21 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml"
+      lang="pt-br">
+
+<head th:replace="~{fragments::head(#{home.title})}">
+    <!--  <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">-->
+</head>
+<body th:object="${user}">
+    <header th:replace="~{fragments::header('home')}"></header>
+
+    <p>Autenticado: <span th:text="${isAuthenticated}"></span></p>
+
+    <div class="container mt-5">
+        <div class="text-center mb-4">
+            <h2 class="text-primary" th:text="#{home.welcome(*{nome})}"></h2>
+        </div>
+    </div>
+
+<footer th:replace="~{fragments::footer}"></footer>
+</body>
+</html>

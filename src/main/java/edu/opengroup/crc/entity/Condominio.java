@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Set;
+
 @Entity
 @Data
 @AllArgsConstructor
@@ -27,5 +29,4 @@ public class Condominio {
             foreignKey = @ForeignKey(name = "FK_ENDERECO_CONDOMINIO")
     )
     private Endereco endereco;
-
 }

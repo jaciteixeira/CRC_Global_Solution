@@ -6,6 +6,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Data
 @AllArgsConstructor
@@ -28,19 +31,24 @@ public class Morador {
     private Integer qtdMoradores;
     @Column(name = "identificadorRes")
     private String identificadorRes;
-//    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.REFRESH})
-//    @JoinColumn(
-//            name = "ID_CONSUMO",
-//            referencedColumnName = "ID_CONSUMO",
-//            foreignKey = @ForeignKey(name = "FK_MORADOR_CONSUMO")
-//    )
-//    private ConsumoMensal consumoMensal;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "STATUS")
+    private Status status;
     @OneToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(
             name = "ID_AUTH",
             referencedColumnName = "ID_AUTH",
-            foreignKey = @ForeignKey(name = "FK_AUTH_MORDADOR")
+            foreignKey = @ForeignKey(name = "FK_AUTH_MORADOR")
     )
-    private Auth auth;
+    private Auth authUser;
+    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinColumn(
+            name = "ID_CONDOMINIO",
+            referencedColumnName = "ID_CONDOMINIO",
+            foreignKey = @ForeignKey(name = "FK_MORADOR_CONDOMINIO")
+    )
+    private Condominio condominio;
+    @OneToMany(mappedBy = "morador", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<MoradorBonus> bonusAssociations = new HashSet<>();
+
 }
-// TODO: quando o morador enviar o a fatura(CONSUMO MENSAL) menor que do mes anterior ganha 100 pontos, maior ganha 50
