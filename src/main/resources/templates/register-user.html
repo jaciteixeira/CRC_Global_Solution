@@ -1,0 +1,61 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml"
+      lang="pt-br">
+
+<head th:replace="~{fragments::head(#{regiter.user.title})}">
+  <!--  <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">-->
+</head>
+<body th:object="${user}">
+  <header th:replace="~{fragments::header('register-user')}"></header>
+  <form th:object="${moradorRequest}" th:action="@{/new-user}" method="post">
+    <div class="mb-3">
+      <label for="email" class="form-label">Nome</label>
+      <input type="email" class="form-control" id="email" th:field="*{nome}" th:errorclass="is-invalid" placeholder="Digite seu email">
+      <div class="invalid-feedback" th:errors="*{nome}"></div>
+    </div>
+    <div class="mb-3">
+      <label for="email" class="form-label">Email</label>
+      <input type="email" class="form-control" id="email" th:field="*{email}" th:errorclass="is-invalid" placeholder="Digite seu email">
+      <div class="invalid-feedback" th:errors="*{email}"></div>
+    </div>
+    <div class="mb-3">
+      <label for="senha" class="form-label">Senha</label>
+      <input type="password" class="form-control" id="senha" th:field="*{senha}" th:errorclass="is-invalid" placeholder="Digite sua senha">
+      <div class="invalid-feedback" th:errors="*{senha}"></div>
+    </div>
+    <div class="mb-3">
+      <label for="telefone" class="form-label">CPF</label>
+      <input type="text" class="form-control" id="telefone" th:field="*{cpf}" th:errorclass="is-invalid" placeholder="CPF">
+      <div class="invalid-feedback" th:errors="*{cpf}"></div>
+    </div>
+    <div class="mb-3">
+      <label for="tipoDoc" class="form-label">Condominio</label>
+      <select class="form-control" id="tipoDoc" th:field="*{condominio}" th:errorclass="is-invalid">
+        <option value="" selected th:text="#{regiter.user.selected}">Selecione o comdominio</option>
+        <option th:each="tipo : ${condominios}" th:value="${condominio}" th:text="${condominio}"></option>
+      </select>
+      <div class="invalid-feedback" th:errors="*{condominio}"></div>
+    </div>
+    <div class="mb-3">
+      <label for="numeroDocumento" class="form-label">Número e bloco da residencia</label>
+      <input type="text" class="form-control" id="numeroDocumento" th:field="*{identificadorRes}" th:errorclass="is-invalid" placeholder="Digite o número">
+      <div class="invalid-feedback" th:errors="*{identificadorRes}"></div>
+    </div>
+    <button type="submit" class="btn btn-primary">Cadastrar</button>
+  </form>
+
+  <div class="row">
+    <span>Já tem conta? <a th:href="@{/login}">Login</a></span>
+  </div>
+  <div class="row">
+    <a href="/">Retorne para a página inicial</a>
+  </div>
+  </div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</body>
+</html>

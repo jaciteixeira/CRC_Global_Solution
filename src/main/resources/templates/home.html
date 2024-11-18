@@ -8,12 +8,50 @@
 <body th:object="${user}">
     <header th:replace="~{fragments::header('home')}"></header>
 
-    <p>Autenticado: <span th:text="${isAuthenticated}"></span></p>
-
     <div class="container mt-5">
         <div class="text-center mb-4">
             <h2 class="text-primary" th:text="#{home.welcome(*{nome})}"></h2>
         </div>
+    </div>
+
+    <div th:if="*{authUser.role=='USER'}">
+            <div class="col-md-6 mb-3">
+                <a th:href="@{/{id}/enviar-fatura(id=${user.id})}" class="btn btn-primary btn-block" th:text="#{home.add.fatura}"></a>
+            </div>
+            <div class="col-md-6 mb-3">
+                <a th:href="@{/{id}/faturas(id=${user.id})}" class="btn btn-primary btn-block" th:text="#{home.listar.faturas}"></a>
+            </div>
+<!--            <div class="col-md-6 mb-3">-->
+<!--                <form method="post" th:action="@{/{id}/analisar(id=${user.id})}">-->
+<!--                    <button type="submit" class="btn btn-primary btn-block" th:text="#{gerar_insight}"></button>-->
+<!--                </form>-->
+<!--            </div>-->
+            <!-- Centralização do Botão Excluir Conta -->
+            <div class="col-12 d-flex justify-content-center mb-3">
+                <script th:inline="javascript">
+                    /*<![CDATA[*/
+                    var confirmMessage = /*[[#{home.confirm.excluir}]]*/ 'Tem certeza que deseja excluir sua conta? Esta ação não pode ser desfeita.';
+                    /*]]>*/
+                </script>
+                <form method="post" th:action="@{/{id}/desativar-conta(id=${user.id})}" onsubmit="return confirm(confirmMessage);">
+                    <button type="submit" class="btn btn-danger" th:text="#{home.desativar.conta}">Desativar conta</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div th:if="*{authUser.role=='ADMIN'}" class="text-center mt-4">
+        <a th:href="@{/all/moradores}" class="btn btn-primary" th:text="#{home.listar.moradores}"></a>
+    </div>
+
+    <div th:if="*{authUser.role=='MANAGER'}" class="text-center mt-4">
+        <a th:href="@{/all/condominios}" class="btn btn-primary" th:text="#{home.listar.moradores}">Listar Moradores</a>
+    </div>
+
+    <div class="text-center mt-4">
+        <a th:href="@{/{id}/atualizar-usuario(id=${user.id})}" class="btn btn-primary mb-3" th:text="#{home.atualizar_perfil}"></a>
+        <a th:href="@{/chat_gpt}" class="btn btn-warning mb-3" th:text="#{home.gpt}"></a>
+
     </div>
 
 <footer th:replace="~{fragments::footer}"></footer>

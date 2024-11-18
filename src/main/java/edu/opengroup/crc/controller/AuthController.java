@@ -1,6 +1,9 @@
 package edu.opengroup.crc.controller;
 
+import edu.opengroup.crc.entity.Morador;
+import edu.opengroup.crc.entity.dto.MoradorRequest;
 import edu.opengroup.crc.repository.AuthRepository;
+import edu.opengroup.crc.repository.CondominioRepository;
 import edu.opengroup.crc.repository.MoradorRepository;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +21,8 @@ public class AuthController {
     AuthRepository authRepository;
     @Autowired
     MoradorRepository moradorRepository;
+    @Autowired
+    CondominioRepository condominioRepository;
 
     @GetMapping("/teste")
     public String teste(){
@@ -46,6 +51,7 @@ public class AuthController {
         boolean isAuthenticated = auth != null && auth.isAuthenticated() &&
                 !"anonymousUser".equals(auth.getName());
 
+        assert auth != null;
         String username = auth.getName();
         var authUser = authRepository.findByEmail(username);
         var morador = moradorRepository.findByAuthUser(authUser.get());
@@ -57,9 +63,23 @@ public class AuthController {
 
         var role = morador.getAuthUser().getRole();
         mv.addObject("role", role);
+        System.out.println("Morador: " + morador);
 
         return mv;
     }
 
+    @GetMapping("/new-user")
+    public ModelAndView viewNewUser(HttpSession session) {
+        if (session.getAttribute("moradorRequest") != null ) {
+            return new ModelAndView("home");
+        }
+        ModelAndView mv = new ModelAndView("register-user")
+                .addObject("moradorRequest", new MoradorRequest("","","","","",null))
+                .addObject("condominios", condominioRepository.findAll());
+
+        return mv;
+
+        //TODO: cadastro de usuario
+    }
 
 }
