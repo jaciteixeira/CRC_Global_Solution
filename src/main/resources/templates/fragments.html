@@ -31,7 +31,7 @@
           <li class="nav-item" sec:authorize="isAuthenticated()">
             <form th:action="@{/logout}" method="post">
               <button class="btn btn-secondary btn-sm ml-3" type="submit" th:text="#{header.logout}">
-                <i class="fas fa-sign-out-alt"></i>Logout
+                <i class="fas fa-sign-out-alt"></i></i>Logout
               </button>
             </form>
           </li>
@@ -80,3 +80,13 @@
     <p class="mb-0">© 2024 OPEN GROUP - <span th:text="#{rights}">Todos os direitos reservados.</span></p>
   </div>
 </footer>
+
+<!--<a class="btn btn-info btn-sm ml-3" th:href="@{/new-user}" th:text="#{new_user}">-->
+<!--  <i class="fa-solid fa-user-plus"></i> Cadastrar-->
+<!--</a>-->
+<!--<a class="btn btn-info btn-sm ml-3" th:href="@{/login}" th:text="#{header.login}">-->
+<!--  <i class="fa-solid fa-user"></i> Login-->
+<!--</a>-->
+<!--<button class="btn btn-secondary btn-sm ml-3" type="submit" th:text="#{header.logout}">-->
+<!--  <i class="fas fa-sign-out-alt"></i></i>Logout-->
+<!--</button>-->

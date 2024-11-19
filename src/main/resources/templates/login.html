@@ -16,9 +16,9 @@
 
   <form th:action="@{/login}" method="post">
 
-    <span th:text="#{login.email}">Usuário:</span> <input class="form-control" type="text" id="username"
+    <span th:text="#{email}">Usuário:</span> <input class="form-control" type="text" id="username"
                                                     name="username"><br>
-    <span th:text="#{login.password}">Senha:</span> <input class="form-control"
+    <span th:text="#{password}">Senha:</span> <input class="form-control"
                                                      type="password" id="password" name="password"><br>
 
     <div th:if="${error_user_not_found}">
@@ -47,10 +47,10 @@
 
   <div class="row">
     <span th:text="#{login.not_account}">Não tem conta? </span>
-    <a th:text="#{login.register}" href="/new-user"> Registrar</a>
+    <a th:text="#{register}" href="/new-user"> Registrar</a>
   </div>
   <div class="row">
-    <a href="/" th:text="#{login.return}">Retorne para a página inicial</a>
+    <a href="/" th:text="#{return.initial}">Retorne para a página inicial</a>
   </div>
 </div>
 

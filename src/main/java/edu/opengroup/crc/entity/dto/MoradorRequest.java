@@ -5,22 +5,17 @@ import jakarta.validation.constraints.*;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.br.CPF;
 
 @Builder
 public record MoradorRequest(
-        @NotBlank(message = "Nome é obrigatório!")
-        String nome,
-        @NotBlank(message = "O email é obrigatório!")
-        @Email(message = "Email inválido!")
-        String email,
-        @NotBlank
-        String cpf,
-        @NotBlank
-        String identificadorRes,
+        @NotBlank String nome,
+        @NotBlank @Email String email,
+        @NotBlank String identificadorRes,
+        @NotNull @CPF String cpf,
+        @NotNull Integer qtdMoradores,
         @Pattern(regexp = "(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_=+-]).{8,16}", message = "A senha deve seguir o padrão: ")
-        @NotEmpty(message = "Senha é obrigatório!")
-        String senha,
-        @NotBlank
-        Condominio condominio
+        @NotBlank String senha,
+        @NotNull Condominio condominio
 ) {
 }

@@ -1,9 +1,6 @@
 package edu.opengroup.crc.controller;
 
-import edu.opengroup.crc.entity.Morador;
-import edu.opengroup.crc.entity.dto.MoradorRequest;
 import edu.opengroup.crc.repository.AuthRepository;
-import edu.opengroup.crc.repository.CondominioRepository;
 import edu.opengroup.crc.repository.MoradorRepository;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +9,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.ModelAndView;
-
 @Controller
 public class AuthController {
     // TODO: quando o morador enviar o a fatura(CONSUMO MENSAL) menor que do mes anterior ganha 100 pontos, maior ganha 50
@@ -21,8 +17,6 @@ public class AuthController {
     AuthRepository authRepository;
     @Autowired
     MoradorRepository moradorRepository;
-    @Autowired
-    CondominioRepository condominioRepository;
 
     @GetMapping("/teste")
     public String teste(){
@@ -63,23 +57,9 @@ public class AuthController {
 
         var role = morador.getAuthUser().getRole();
         mv.addObject("role", role);
-        System.out.println("Morador: " + morador);
 
         return mv;
     }
 
-    @GetMapping("/new-user")
-    public ModelAndView viewNewUser(HttpSession session) {
-        if (session.getAttribute("moradorRequest") != null ) {
-            return new ModelAndView("home");
-        }
-        ModelAndView mv = new ModelAndView("register-user")
-                .addObject("moradorRequest", new MoradorRequest("","","","","",null))
-                .addObject("condominios", condominioRepository.findAll());
-
-        return mv;
-
-        //TODO: cadastro de usuario
-    }
 
 }
