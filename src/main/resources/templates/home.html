@@ -8,21 +8,24 @@
 <body th:object="${user}">
     <header th:replace="~{fragments::header('home')}"></header>
 
+    <div th:if="${successUpdate}" class="alert alert-success" role="alert">
+        <span th:text="#{success.update}">Sucesso!</span>
+    </div>
+
     <div class="container mt-5">
         <div class="text-center mb-4">
             <h2 class="text-primary" th:text="#{home.welcome(*{nome})}"></h2>
         </div>
     </div>
 
-    <div th:if="*{authUser.role.toString()=='USER'}">
-            <div class="text-center mt-4">
-                <a th:href="@{/{id}/enviar-fatura(id=${user.id})}" class="btn btn-primary btn-block" th:text="#{home.add.fatura}"></a>
+    <div th:if="*{authUser.role.toString()=='USER'}" class="text-center mb-4">
+            <div >
+                <a th:href="@{/{id}/enviar-fatura(id=${user.id})}" class="btn btn-info mb-3" th:text="#{home.add.fatura}"></a>
+
+                <a th:href="@{/{id}/faturas(id=${user.id})}" class="btn btn-info mb-3" th:text="#{home.listar.faturas}"></a>
+
             </div>
-            <div class="text-center mt-4">
-                <a th:href="@{/{id}/faturas(id=${user.id})}" class="btn btn-primary btn-block" th:text="#{home.listar.faturas}"></a>
-            </div>
-            <!-- Centralização do Botão Excluir Conta -->
-            <div class="col-12 d-flex justify-content-center mb-3">
+            <div class="col-12 d-flex justify-content-center mt-4">
                 <script th:inline="javascript">
                     /*<![CDATA[*/
                     var confirmMessage = /*[[#{home.confirm.excluir}]]*/ 'Tem certeza que deseja desativar sua conta?';
@@ -36,11 +39,16 @@
     </div>
 
     <div th:if="*{authUser.role.toString()=='ADMIN' || authUser.role.toString()=='MANAGER'}" class="text-center mt-4">
-        <a th:href="@{/all/moradores}" class="btn btn-primary" th:text="#{home.listar.moradores}">Listar Moradores</a>
+        <a th:href="@{/all/moradores}" class="btn btn-primary" th:text="#{home.listar.moradores}">Listar moradores</a>
+        <a th:href="@{/adicionar-bonus}" class="btn btn-warning mb-3" th:text="#{home.bonus.disponiveis}">Adicionar bonus</a>
     </div>
 
     <div th:if="*{authUser.role.toString()=='MANAGER'}" class="text-center mt-4">
         <a th:href="@{/all/condominios}" class="btn btn-primary" th:text="#{home.listar.condominios}">Listar Condomínio</a>
+    </div>
+
+    <div class="text-center mt-4">
+        <a th:href="@{/bonus-disponiveis}" class="btn btn-warning mb-3" th:text="#{home.bonus.disponiveis}">bonus.disponiveis</a>
     </div>
 
     <div class="text-center mt-4">

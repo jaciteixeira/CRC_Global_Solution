@@ -1,0 +1,73 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml"
+      lang="pt-br">
+
+<head th:replace="~{fragments::head(#{update.user.title})}">
+    <!--  <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">-->
+</head>
+<body>
+
+<header th:replace="~{fragments::header('atualizar-perfil')}"></header>
+
+<p th:text="${morador.id}"></p>
+<form th:object="${moradorRequest}" th:action="@{/{id}/atualizar-perfil(id=${morador.id})}" method="post">
+
+    <!--    Nome-->
+    <div class="mb-3">
+        <label for="nome" class="form-label" th:text="#{register.nome}">Nome</label>
+        <input type="text" class="form-control" id="nome" th:field="*{nome}" th:errorclass="is-invalid">
+        <div class="invalid-feedback" th:errors="*{nome}"></div>
+    </div>
+
+    <!--    Quantidade de moradores-->
+    <div class="mb-3">
+        <label for="qtdMoradores" class="form-label">Quantidade de moradores</label>
+        <input type="number" class="form-control" id="qtdMoradores" th:field="*{qtdMoradores}" th:errorclass="is-invalid">
+        <div class="invalid-feedback" th:errors="*{qtdMoradores}"></div>
+    </div>
+
+    <!--    Senha-->
+    <div class="mb-3">
+        <label for="senha" class="form-label" th:text="#{password}">Senha</label>
+        <input type="password" class="form-control" id="senha" th:field="*{senha}" th:errorclass="is-invalid">
+        <div class="invalid-feedback" th:errors="*{senha}"></div>
+    </div>
+
+    <!-- Confirmação de Senha -->
+    <div class="mb-3">
+        <label for="confirmarSenha" class="form-label">Confirme sua Senha</label>
+        <input type="password" class="form-control" id="confirmarSenha" oninput="verificarSenha()">
+        <div class="invalid-feedback" id="erroSenha" style="display: none;" th:text="#{confirm.password}">As senhas não coincidem.</div>
+    </div>
+    <button type="submit" class="btn btn-primary" id="btnCadastrar" disabled th:text="#{register}">Cadastrar</button>
+
+</form>
+
+<script>
+    function verificarSenha() {
+        const senha = document.getElementById("senha").value;
+        const confirmarSenha = document.getElementById("confirmarSenha").value;
+        const erroSenha = document.getElementById("erroSenha");
+        const btnCadastrar = document.getElementById("btnCadastrar");
+
+        if (confirmarSenha === "") {
+            // Esconde o erro se o campo de confirmação está vazio
+            erroSenha.style.display = "none";
+            btnCadastrar.disabled = true;
+        } else if (senha !== confirmarSenha) {
+            // Exibe o erro se as senhas não coincidem
+            erroSenha.style.display = "block";
+            btnCadastrar.disabled = true;
+        } else {
+            // Remove o erro e habilita o botão se as senhas coincidem
+            erroSenha.style.display = "none";
+            btnCadastrar.disabled = false;
+        }
+    }
+</script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>

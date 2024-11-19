@@ -2,6 +2,7 @@ package edu.opengroup.crc.controller;
 
 import edu.opengroup.crc.entity.*;
 import edu.opengroup.crc.entity.dto.MoradorRequest;
+import edu.opengroup.crc.entity.dto.MoradorRequestUpdate;
 import edu.opengroup.crc.repository.AuthRepository;
 import edu.opengroup.crc.repository.CondominioRepository;
 import edu.opengroup.crc.repository.MoradorRepository;
@@ -129,6 +130,39 @@ public class MoradorController {
 
     @GetMapping("/{id}/atualizar-perfil")
     public ModelAndView viewAtualizaPerfil(@PathVariable Long id) {
-        return new ModelAndView("profile_update");
+        Morador morador = moradorRepository.findById(id).get();
+        return new ModelAndView("profile_update")
+                .addObject("morador", morador)
+                .addObject("condominios", condominioRepository.findAll())
+                .addObject("moradorRequest", new MoradorRequestUpdate("",null,""));
+    }
+
+    @PostMapping("/{id}/atualizar-perfil")
+    public ModelAndView atualizaPerfil(@PathVariable Long id,
+                                       @Valid MoradorRequestUpdate moradorUpdate,
+                                       BindingResult bindingResult){
+        Morador morador = moradorRepository.findById(id).orElse(null);
+
+        if (bindingResult.hasErrors()) {
+            return new ModelAndView("profile_update")
+                    .addObject("morador", morador)
+                    .addObject("condominios", condominioRepository.findAll())
+                    .addObject("moradorRequest", new MoradorRequest("","","","",null,"",null));
+        }
+        assert morador != null;
+        Auth auth = morador.getAuthUser();
+        auth.setHashSenha(passwordEncoder.encode(moradorUpdate.senha()));
+
+        morador.setNome(moradorUpdate.nome());
+        morador.setQtdMoradores(moradorUpdate.qtdMoradores());
+        morador.setAuthUser(auth);
+
+        try {
+            moradorRepository.save(morador);
+        }catch (DataIntegrityViolationException e){
+            bindingResult.reject("error.morador", ""+e.getMostSpecificCause().getMessage());
+        }
+        return new ModelAndView("redirect:/home")
+                .addObject("sucessMessage", "Atualizado com sucesso.");
     }
 }
