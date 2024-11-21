@@ -1,5 +1,7 @@
 package edu.opengroup.crc.controller;
 
+import edu.opengroup.crc.entity.Role;
+import edu.opengroup.crc.entity.Status;
 import edu.opengroup.crc.repository.AuthRepository;
 import edu.opengroup.crc.repository.MoradorRepository;
 import jakarta.servlet.http.HttpSession;
@@ -9,6 +11,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
+
 @Controller
 public class AuthController {
 
@@ -44,6 +48,7 @@ public class AuthController {
         boolean isAuthenticated = auth != null && auth.isAuthenticated() &&
                 !"anonymousUser".equals(auth.getName());
 
+
         assert auth != null;
         String username = auth.getName();
         var authUser = authRepository.findByEmail(username);
@@ -54,9 +59,8 @@ public class AuthController {
         mv.addObject("isAuthenticated", isAuthenticated);
         session.setAttribute("user", morador);
 
-        var role = morador.getAuthUser().getRole();
-        mv.addObject("role", role);
-
+//        if (morador.getAuthUser().getRole() == Role.USER
+//                && morador.getStatus() == Status.INATIVO) mv.setViewName("ativar-conta");
         return mv;
     }
 

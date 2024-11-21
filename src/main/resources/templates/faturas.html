@@ -1,0 +1,52 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml"
+      lang="pt-br">
+
+<head th:replace="~{fragments::head(#{faturas.title})}">
+</head>
+<body >
+<header th:replace="~{fragments::header('faturas')}"></header>
+<div class="container">
+
+  <table class="table table-hover">
+    <thead>
+    <tr>
+      <th scope="col" th:text="#{data.fatura}">Data Fatura</th>
+      <th scope="col" th:text="#{data.upload}">Data Upload</th>
+      <th scope="col" th:text="#{qtd.consumida}">Quantidade Consumida</th>
+      <th></th>
+<!--      <th></th>-->
+<!--      <th></th>-->
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:if="${faturas.isEmpty()}">
+      <td colspan="4" class="no-files" th:text="#{faturas.empty}">Nenhuma fatura encontrado.</td>
+    </tr>
+
+    <tr th:each="fatura : ${faturas}">
+      <td th:text="${fatura.dataConsumo}">data</td>
+      <td th:text="${fatura.dataUpload}">Data de Upload</td>
+      <td th:text="${fatura.quantidadeConsumida}">consumo</td>
+
+      <td>
+        <a th:href="@{/{id}/details-fatura(id = ${fatura.id})}" class="btn btn-link" th:text="#{details}">Detalhes</a>
+      </td>
+<!--      <td>-->
+<!--        <a th:href="@{/{id}/remover-fatura(id = ${fatura.id})}" class="btn btn-link text-danger">Remover</a>-->
+<!--      </td>-->
+    </tr>
+    </tbody>
+  </table>
+
+  <div class="row">
+    <a th:href="@{/{id}/enviar-fatura(id=${morador.id})}" class="btn btn-info" th:text="#{home.add.fatura}">Adicionar fatura</a>
+  </div>
+
+  <div class="row">
+    <a href="/home"  class="btn btn-link" th:text="#{return.initial}">Retorne para a página inicial</a>
+  </div>
+</div>
+<footer th:replace="~{fragments::footer}"></footer>
+</body>
+</html>

@@ -26,9 +26,9 @@ public class Bonus {
     @Column(name = "DESCRICAO")
     private String descricao;
     @Column(name = "CUSTO")
-    private String custo;
+    private Integer custo;
     @Column(name = "QTD")
-    private String quantidade;
+    private Integer quantidade;
     @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(
             name = "ID_CONDOMINIO",

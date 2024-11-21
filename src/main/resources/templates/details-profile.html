@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head th:replace="~{fragments::head(#{details.profile})}"></head>
+<body>
+<header th:replace="~{fragments::header('details-profile')}"></header>
+
+<div class="container mt-5" th:object="${morador}">
+  <div class="row">
+    <div class="col-md-12">
+      <h1 class="text-center" th:text="#{profile.title}">Detalhes do Perfil</h1>
+      <hr>
+    </div>
+  </div>
+
+  <!-- Informações do Morador -->
+  <div class="row mt-4">
+    <div class="col-md-6">
+      <h5 th:text="#{profile.name}">Nome:</h5>
+      <p th:text="*{nome}">[Nome do Morador]</p>
+    </div>
+    <div class="col-md-6">
+      <h5 th:text="#{profile.email}">Email:</h5>
+      <p th:text="*{authUser.email}">[Email do Morador]</p>
+    </div>
+  </div>
+
+  <div class="row mt-4" sec:authorize="hasRole('USER')">
+    <div class="col-md-6">
+      <h5 th:text="#{profile.address}">Endereço:</h5>
+      <p th:text="*{condominio.endereco}">[Endereço do Morador]</p>
+    </div>
+    <div class="col-md-6">
+      <h5 th:text="#{profile.points}">Pontos Acumulados:</h5>
+      <p th:text="*{pontos}">[Pontos do Morador]</p>
+    </div>
+  </div>
+
+  <!-- Botões de Ação -->
+  <div class="row mt-5">
+    <div class="col-md-6 text-start">
+      <a th:href="@{/}" class="btn btn-secondary" th:text="#{return.initial}">Voltar para a Home</a>
+    </div>
+    <div class="col-md-6 text-end">
+      <a th:href="@{/{id}/atualizar-perfil(id=*{id})}" class="btn btn-primary" th:text="#{edit.profile}">Editar Perfil</a>
+    </div>
+  </div>
+</div>
+
+<footer th:replace="~{fragments::footer}"></footer>
+</body>
+</html>

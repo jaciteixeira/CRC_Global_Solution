@@ -7,7 +7,12 @@ spring:
     check-template-location: false
   ai:
     openai:
-      api-key: ''
+      api-key:
+  rabbitmq:
+    host:
+    port: 5672
+    username: guest
+    password: guest
 
 server:
   port: 8085

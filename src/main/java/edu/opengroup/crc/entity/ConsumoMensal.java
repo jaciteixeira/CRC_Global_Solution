@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
@@ -21,9 +22,11 @@ public class ConsumoMensal {
     @Column(name = "ID_CONSUMO")
     private Long id;
     @Column(name = "QTD_CONSUMIDA")
-    private Long quantidadeConsumida;
-    @Column(name = "DATA")
-    private LocalDateTime data;
+    private Double quantidadeConsumida;
+    @Column(name = "DATA_CONSUMO")
+    private LocalDate dataConsumo;
+    @Column(name = "DATAUPLOAD")
+    private LocalDateTime dataUpload;
     @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(
             name = "ID_MORADOR",

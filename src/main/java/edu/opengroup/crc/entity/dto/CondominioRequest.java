@@ -1,7 +1,9 @@
 package edu.opengroup.crc.entity.dto;
 
 import jakarta.validation.constraints.*;
+import lombok.Builder;
 
+@Builder
 public record CondominioRequest(
         @NotBlank
         String nome,

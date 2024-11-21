@@ -7,84 +7,82 @@
 </head>
 <body>
 
-  <header th:replace="~{fragments::header('new-user')}"></header>
-
+<header th:replace="~{fragments::header('new-user')}"></header>
+<div class="container">
   <form th:object="${moradorRequest}" th:action="@{/new-user}" method="post">
 
-<!--    Nome-->
-    <div class="mb-3">
-      <label for="nome" class="form-label" th:text="#{register.nome}">Nome</label>
-      <input type="text" class="form-control" id="nome" th:field="*{nome}" th:errorclass="is-invalid">
-      <div class="invalid-feedback" th:errors="*{nome}"></div>
-    </div>
+      <!--    Nome-->
+      <div class="mb-3">
+          <label for="nome" class="form-label" th:text="#{register.nome}">Nome</label>
+          <input type="text" class="form-control" id="nome" th:field="*{nome}" th:errorclass="is-invalid">
+          <div class="invalid-feedback" th:errors="*{nome}"></div>
+      </div>
 
-<!--    Email-->
-    <div class="mb-3">
-      <label for="email" class="form-label" th:text="#{email}">Email</label>
-      <input type="email" class="form-control" id="email" th:field="*{email}" th:errorclass="is-invalid">
-      <div class="invalid-feedback" th:errors="*{email}"></div>
-    </div>
+      <!--    Email-->
+      <div class="mb-3">
+          <label for="email" class="form-label" th:text="#{email}">Email</label>
+          <input type="email" class="form-control" id="email" th:field="*{email}" th:errorclass="is-invalid">
+          <div class="invalid-feedback" th:errors="*{email}"></div>
+      </div>
 
-    <!--    CPF-->
-    <div class="mb-3">
-      <label for="cpf" class="form-label">CPF</label>
-      <input type="text" class="form-control" id="cpf" th:field="*{cpf}" th:errorclass="is-invalid" maxlength="14"
-             oninput="mascaraCPF(this)">
-      <div class="invalid-feedback" th:errors="*{cpf}"></div>
-    </div>
+      <!--    CPF-->
+      <div class="mb-3">
+          <label for="cpf" class="form-label">CPF</label>
+          <input type="text" class="form-control" id="cpf" th:field="*{cpf}" th:errorclass="is-invalid" maxlength="14"
+                 oninput="mascaraCPF(this)">
+          <div class="invalid-feedback" th:errors="*{cpf}"></div>
+      </div>
 
-<!--    Quantidade de moradores-->
-    <div class="mb-3">
-      <label for="qtdMoradores" class="form-label">Quantidade de moradores</label>
-      <input type="number" class="form-control" id="qtdMoradores" th:field="*{qtdMoradores}" th:errorclass="is-invalid">
-      <div class="invalid-feedback" th:errors="*{qtdMoradores}"></div>
-    </div>
+      <!--    Quantidade de moradores-->
+      <div class="mb-3">
+          <label for="qtdMoradores" class="form-label" th:text="#{register.quantidade}">Quantidade de moradores</label>
+          <input type="number" class="form-control" id="qtdMoradores" th:field="*{qtdMoradores}" th:errorclass="is-invalid">
+          <div class="invalid-feedback" th:errors="*{qtdMoradores}"></div>
+      </div>
 
-<!--    Condominio-->
-    <div class="mb-3">
-      <label for="condominio" class="form-label">Condomínio</label>
-      <select class="form-control" id="condominio" th:field="*{condominio}" th:errorclass="is-invalid">
-        <option value="">Selecione o condomínio</option>
-        <option th:each="cond : ${condominios}" th:value="${cond.id}" th:text="${cond.nome}"></option>
-      </select>
-      <div class="invalid-feedback" th:errors="*{condominio}"></div>
-    </div>
+      <!--    Condominio-->
+      <div class="mb-3">
+          <label for="condominio" class="form-label">Condomínio</label>
+          <select class="form-control" id="condominio" th:field="*{condominio}" th:errorclass="is-invalid">
+              <option value="" th:text="#{regiter.user.selected}">Selecione o condomínio</option>
+              <option th:each="cond : ${condominios}" th:value="${cond.id}" th:text="${cond.nome}"></option>
+          </select>
+          <div class="invalid-feedback" th:errors="*{condominio}"></div>
+      </div>
 
-<!--    Número e bloco da residência-->
-    <div class="mb-3">Número e bloco da residência
-      <label for="identificadorRes" class="form-label" th:text="#{identificadorRes}">Número e bloco da residência</label>
-      <input type="text" class="form-control" id="identificadorRes" th:field="*{identificadorRes}" th:errorclass="is-invalid">
-      <div class="invalid-feedback" th:errors="*{identificadorRes}"></div>
-    </div>
+      <!--    Número e bloco da residência-->
+      <div class="mb-3">
+          <label for="identificadorRes" class="form-label" th:text="#{identificadorRes}">Número e bloco da residência</label>
+          <input type="text" class="form-control" id="identificadorRes" th:field="*{identificadorRes}" th:errorclass="is-invalid">
+          <div class="invalid-feedback" th:errors="*{identificadorRes}"></div>
+      </div>
 
-    <!--    Senha-->
-    <div class="mb-3">
-      <label for="senha" class="form-label" th:text="#{password}">Senha</label>
-      <input type="password" class="form-control" id="senha" th:field="*{senha}" th:errorclass="is-invalid">
-      <div class="invalid-feedback" th:errors="*{senha}"></div>
-    </div>
+      <!--    Senha-->
+      <div class="mb-3">
+          <label for="senha" class="form-label" th:text="#{password}">Senha</label>
+          <input type="password" class="form-control" id="senha" th:field="*{senha}" th:errorclass="is-invalid">
+          <div class="invalid-feedback" th:errors="*{senha}"></div>
+      </div>
 
-    <!-- Confirmação de Senha -->
-    <div class="mb-3">
-      <label for="confirmarSenha" class="form-label">Confirme sua Senha</label>
-      <input type="password" class="form-control" id="confirmarSenha" oninput="verificarSenha()">
-      <div class="invalid-feedback" id="erroSenha" style="display: none;" th:text="#{confirm.password}">As senhas não coincidem.</div>
-    </div>
+      <!-- Confirmação de Senha -->
+      <div class="mb-3">
+          <label for="confirmarSenha" class="form-label">Confirme sua Senha</label>
+          <input type="password" class="form-control" id="confirmarSenha" oninput="verificarSenha()">
+          <div class="invalid-feedback" id="erroSenha" style="display: none;" th:text="#{confirm.password}">As senhas não coincidem.</div>
+      </div>
 
-    <!--    <button type="submit" class="btn btn-primary" th:text="#{register}">Cadastrar</button>-->
-
-    <button type="submit" class="btn btn-primary" id="btnCadastrar" disabled th:text="#{register}">Cadastrar</button>
+      <button type="submit" class="btn btn-info" id="btnCadastrar" disabled th:text="#{register}">Cadastrar</button>
 
   </form>
 
   <div class="row">
-    <span th:text="#{have_account}">Já tem conta? <a th:href="@{/login}">Login</a></span>
+      <span th:text="#{have_account}">Já tem conta? <a th:href="@{/login}">Login</a></span>
   </div>
   <div class="row">
-    <a href="/" th:text="#{return.initial}">Retorne para a página inicial</a>
+      <a href="/" th:text="#{return.initial}">Retorne para a página inicial</a>
   </div>
-  </div>
-
+</div>
+<footer th:replace="~{fragments::footer}"></footer>
 <script>
   function mascaraCPF(input) {
     // Remove todos os caracteres que não sejam números

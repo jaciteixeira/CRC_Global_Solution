@@ -22,7 +22,8 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/", "/login", "/teste", "/new-user", "/h2-console/**", "/public/**", "/css/**", "/js/**", "/images/**").permitAll()
-                        .requestMatchers("/all/usuarios","/remover-conta", "/ativar-conta").hasAuthority("ADMIN")
+                        .requestMatchers("/moradores","/remover-morador").hasAuthority("ADMIN")
+                        .requestMatchers("/condominios", "/add-condominio").hasAuthority("MANAGER")
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
@@ -34,6 +35,8 @@ public class SecurityConfig {
                 .logout(logout -> logout
                         .logoutUrl("/logout")
                         .logoutSuccessUrl("/login?logout=true")
+                        .invalidateHttpSession(true)
+                        .deleteCookies("JSESSIONID")
                         .permitAll()
                 )
                 .sessionManagement(session -> session

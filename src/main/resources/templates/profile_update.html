@@ -3,46 +3,60 @@
       lang="pt-br">
 
 <head th:replace="~{fragments::head(#{update.user.title})}">
-    <!--  <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">-->
 </head>
 <body>
 
 <header th:replace="~{fragments::header('atualizar-perfil')}"></header>
 
-<p th:text="${morador.id}"></p>
-<form th:object="${moradorRequest}" th:action="@{/{id}/atualizar-perfil(id=${morador.id})}" method="post">
+<div class="container">
+    <form th:object="${moradorRequest}" th:action="@{/{id}/atualizar-perfil(id=${morador.id})}" method="post">
 
-    <!--    Nome-->
-    <div class="mb-3">
-        <label for="nome" class="form-label" th:text="#{register.nome}">Nome</label>
-        <input type="text" class="form-control" id="nome" th:field="*{nome}" th:errorclass="is-invalid">
-        <div class="invalid-feedback" th:errors="*{nome}"></div>
-    </div>
+        <!--    Nome-->
+        <div class="mb-3">
+            <label for="nome" class="form-label" th:text="#{register.nome}">Nome</label>
+            <input type="text" class="form-control" id="nome" th:field="*{nome}" th:errorclass="is-invalid">
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}"></div>
+        </div>
 
-    <!--    Quantidade de moradores-->
-    <div class="mb-3">
-        <label for="qtdMoradores" class="form-label">Quantidade de moradores</label>
-        <input type="number" class="form-control" id="qtdMoradores" th:field="*{qtdMoradores}" th:errorclass="is-invalid">
-        <div class="invalid-feedback" th:errors="*{qtdMoradores}"></div>
-    </div>
+        <!--    Quantidade de moradores-->
+        <div class="mb-3">
+            <label for="qtdMoradores" class="form-label" th:text="#{register.quantidade}">Quantidade de moradores</label>
+            <input th:value="*{qtdMoradores}"
+                   type="number"
+                   class="form-control"
+                   id="qtdMoradores"
+                   th:field="*{qtdMoradores}"
+                   th:errorclass="is-invalid"
+                   min="1"
+                   max="1000">
+            <div class="invalid-feedback" th:errors="*{qtdMoradores}"></div>
+        </div>
 
-    <!--    Senha-->
-    <div class="mb-3">
-        <label for="senha" class="form-label" th:text="#{password}">Senha</label>
-        <input type="password" class="form-control" id="senha" th:field="*{senha}" th:errorclass="is-invalid">
-        <div class="invalid-feedback" th:errors="*{senha}"></div>
-    </div>
+        <!--    Senha-->
+        <div class="mb-3">
+            <label for="senha" class="form-label" th:text="#{password}">Senha</label>
+            <input type="password" class="form-control" id="senha" th:field="*{senha}" th:errorclass="is-invalid">
+            <div class="invalid-feedback" th:errors="*{senha}"></div>
+        </div>
 
-    <!-- Confirmação de Senha -->
-    <div class="mb-3">
-        <label for="confirmarSenha" class="form-label">Confirme sua Senha</label>
-        <input type="password" class="form-control" id="confirmarSenha" oninput="verificarSenha()">
-        <div class="invalid-feedback" id="erroSenha" style="display: none;" th:text="#{confirm.password}">As senhas não coincidem.</div>
-    </div>
-    <button type="submit" class="btn btn-primary" id="btnCadastrar" disabled th:text="#{register}">Cadastrar</button>
+        <!-- Confirmação de Senha -->
+        <div class="mb-3">
+            <label for="confirmarSenha" class="form-label">Confirme sua Senha</label>
+            <input type="password" class="form-control" id="confirmarSenha" oninput="verificarSenha()">
+            <div class="invalid-feedback" id="erroSenha" style="display: none;" th:text="#{confirm.password}">As senhas não coincidem.</div>
+        </div>
+        <div class="row mt-5">
 
-</form>
+            <button type="submit" class="btn btn-info col-md-6 text-start" id="btnCadastrar" disabled th:text="#{update}">Atualizar</button>
 
+            <div class="col-md-6 text-end">
+                <a th:href="@{/}" class="btn btn-secondary" th:text="#{return.initial}">Voltar para a Home</a>
+            </div>
+        </div>
+    </form>
+
+</div>
+<footer th:replace="~{fragments::footer}"></footer>
 <script>
     function verificarSenha() {
         const senha = document.getElementById("senha").value;

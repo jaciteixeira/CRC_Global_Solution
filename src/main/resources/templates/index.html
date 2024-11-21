@@ -10,14 +10,11 @@
 <body>
 <!-- Header Placeholder -->
 <header th:replace="~{fragments::header('/')}"></header>
-<div sec:authorize="isAuthenticated()">
-  This content is only shown to authenticated users.
-</div>
 
 <!-- Main Content -->
 <div class="container my-5">
   <div class="text-center mb-4">
-    <h1 th:text="#{welcome}" class="display-4 text-primary">Bem vindo a CRC</h1>
+    <h1 th:text="#{welcome}" class="display-4 text-info">Bem vindo a CRC</h1>
     <h5 th:text="#{slogan}" class="font-italic mt-4">Monitoramento e Otimização do Consumo de Energia para Condomínios e Prédios
     </h5>
     <h3 th:text="#{what_is}" class="text-secondary mt-3">O que é a CRC?</h3>

@@ -1,0 +1,61 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml"
+      lang="pt-br">
+
+<head th:replace="~{fragments::head(#{details.fatura.title})}">
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<header th:replace="~{fragments::header('details-fatura')}"></header>
+
+<div class="container mt-5" th:object="${consumo}">
+  <div class="card shadow-sm">
+    <div class="card-header bg-info text-white">
+      <h4 class="card-title mb-0" th:text="#{details.fatura.title}">Detalhes da Fatura</h4>
+    </div>
+    <div class="card-body">
+      <!-- Informações do Morador -->
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <p><strong th:text="#{morador.nome}">Nome do Morador:</strong></p>
+          <p class="text-muted" th:text="*{morador.nome}">Nome</p>
+        </div>
+        <div class="col-md-6">
+          <p><strong th:text="#{id.residencia}">Identificador Residência:</strong></p>
+          <p class="text-muted" th:text="*{morador.identificadorRes}">Identificador</p>
+        </div>
+      </div>
+
+      <!-- Detalhes da Fatura -->
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <p><strong th:text="#{qtd.consumida}">Consumo da Fatura:</strong></p>
+          <p class="text-muted" th:text="*{quantidadeConsumida}">Consumo</p>
+        </div>
+        <div class="col-md-6">
+          <p><strong th:text="#{data.upload}">Data de Upload:</strong></p>
+          <p class="text-muted" th:text="*{dataUpload}">Data</p>
+        </div>
+        <div class="col-md-6">
+          <p><strong th:text="#{data.fatura}">Data da Fatura:</strong></p>
+          <p class="text-muted" th:text="*{dataConsumo}">Data</p>
+        </div>
+      </div>
+
+      <!-- Link de Retorno -->
+      <div class="text-end">
+        <a th:href="@{/{id}/faturas(id=*{morador.id})}"
+           class="btn btn-outline-info"
+           th:text="#{return.lista}">
+          Retorne à Lista de Faturas
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+<footer th:replace="~{fragments::footer}"></footer>
+<!-- Bootstrap JS Bundle -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

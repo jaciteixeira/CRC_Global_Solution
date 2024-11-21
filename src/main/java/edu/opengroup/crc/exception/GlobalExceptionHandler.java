@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @ControllerAdvice
@@ -14,7 +15,7 @@ public class GlobalExceptionHandler {
             HttpServletRequest request,
             RedirectAttributes redirectAttributes,
             UsernameNotFoundException e) {
-        redirectAttributes.addAttribute("error_user_not_found", e.getMessage());
+        redirectAttributes.addFlashAttribute("error_user_not_found", e.getMessage());
         System.out.println("Usuario não encontrado!");
         return "redirect:/login";
     }
@@ -26,7 +27,13 @@ public class GlobalExceptionHandler {
         redirectAttributes.addFlashAttribute("error_user_inactive", e.getMessage());
         System.out.println("Usuario inactivado!");
         return "redirect:/login";
+    }
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ModelAndView handleIllegalArgumentException(IllegalArgumentException ex) {
+        ModelAndView modelAndView = new ModelAndView("error");
+        modelAndView.addObject("message", ex.getMessage());
+        return modelAndView;
     }
 
 }

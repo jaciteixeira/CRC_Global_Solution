@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head th:replace="~{fragments::head(#{list.bonus.title})}"></head>
+<body>
+<header th:replace="~{fragments::header('bonus-disponiveis')}">
+</header>
+
+<div class="container mt-5">
+
+  <div class="alert alert-dark" th:if="${bonusInsuficiente}">
+    <span th:text="#{saldo.insuficiente}">Saldo Insuficiente!</span>
+    <span th:text="#{saldo.atual(${morador.pontos})}"></span>
+  </div>
+
+  <div class="table-responsive mt-4">
+    <table class="table table-bordered table-striped">
+      <thead>
+      <tr>
+        <th th:text="#{bonus.nome}">Nome</th>
+        <th th:text="#{bonus.descricao}">Descrição</th>
+        <th th:text="#{bonus.custo}">custos em pontos</th>
+        <th th:text="#{quantidade}">Quantidade</th>
+        <th th:text="#{condominio}">Condominio</th>
+        <th th:if="${morador.authUser.role.toString() == 'USER'}"
+            th:text="#{resgate}">Resgatar</th>
+      </tr>
+      </thead>
+      <tbody>
+
+      <tr th:if="${listbonus.isEmpty()}">
+        <td colspan="4" class="no-files" th:text="#{bonus.empty}">Nenhum morador encontrado.</td>
+      </tr>
+
+      <tr th:each="bonus : ${listbonus}">
+        <td th:text="${bonus.nome}"></td>
+        <td th:text="${bonus.descricao}" class="limited-description"></td>
+        <td th:text="${bonus.custo}"></td>
+        <td th:text="${bonus.quantidade}"></td>
+        <td th:text="${bonus.condominio.nome}"></td>
+        <td th:if="${morador.authUser.role.toString() == 'USER'}">
+          <form method="post" th:action="@{|/{idMorador}/{idCondominio}/{idBonus}/resgatar-bonus|(idCondominio=${morador.condominio.id}, idMorador=${morador.id}, idBonus=${bonus.id})}" >
+            <button type="submit" class="btn btn-danger" th:text="#{resgate}">Resgatar</button>
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Botão Voltar -->
+  <div class="mt-4">
+    <a th:href="@{/}" class="btn btn-secondary text-start" th:text="#{return.initial}">Voltar para a Home</a>
+  </div>
+  <div class="mt-4"
+       th:if="${morador.authUser.role.toString() == 'ADMIN'}">
+    <a th:href="@{|/{idMorador}/{idCondominio}/adicionar-bonus|(idCondominio=${morador.condominio.id}, idMorador =${morador.id})}"
+       class="btn btn-info end"
+       th:text="#{add.bonus}">Adicionar Bonus</a>
+  </div>
+
+</div>
+<footer th:replace="~{fragments::footer}"></footer>
+</body>
+</html>

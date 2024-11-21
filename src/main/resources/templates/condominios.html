@@ -1,0 +1,59 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml"
+      lang="pt-br">
+
+<head th:replace="~{fragments::head(#{condominios.title})}"></head>
+
+<body >
+<header th:replace="~{fragments::header('condominios')}"></header>
+<div class="container mt-5">
+
+    <!-- Tabela de Condominios -->
+    <div class="table-responsive mt-4">
+        <table class="table table-bordered table-striped">
+            <thead>
+            <tr>
+                <th th:text="#{profile.name}">Nome</th>
+                <th th:text="#{profile.address}">Endereço</th>
+                <th th:text="#{city}">Cidade</th>
+                <th th:text="#{estado}">Estado</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+
+            <tr th:if="${condominios.isEmpty()}">
+                <td colspan="4" class="no-files" th:text="#{condominios.empty}">Nenhum condominio encontrado.</td>
+            </tr>
+
+            <tr th:each="condominio : ${condominios}">
+                <td th:text="${condominio.nome}">[Nome do condominio]</td>
+                <td th:text="${condominio.endereco.logradouro}
+                    +','+${condominio.endereco.numero}
+                    +'-'+${condominio.endereco.bairro}">
+                    [Endereço do condominio]
+                </td>
+                <td th:text="${condominio.endereco.cidade}">[Cidade do condominio]</td>
+                <td th:text="${condominio.endereco.uf}">[Estado]</td>
+                <td>
+                    <a th:href="@{/{id}/details-condominio(id = ${condominio.id})}" class="btn btn-link" th:text="#{details}">Detalhes</a>
+                </td>
+
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Botão Voltar -->
+    <div class="mt-4">
+        <a th:href="@{/}" class="btn btn-secondary text-start" th:text="#{return.initial}">Voltar para a Home</a>
+    </div>
+
+    <div class="mt-4">
+        <a th:href="@{/add-condominio}" class="btn btn-info text-end" th:text="#{home.add.condominios}">Adicionar Condomínio</a>
+    </div>
+</div>
+
+<footer th:replace="~{fragments::footer}"></footer>
+</body>
+</html>

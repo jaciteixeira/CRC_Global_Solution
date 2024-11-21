@@ -14,7 +14,9 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name = "T_OP_CRC_MORADOR")
+@Table(name = "T_OP_CRC_MORADOR", uniqueConstraints = {
+        @UniqueConstraint(name = "UK_OP_CRC_CPF", columnNames = "CPF")
+})
 public class Morador {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SQ_CRC_MORADOR")
@@ -28,7 +30,7 @@ public class Morador {
     @Column(name = "pontos")
     private Integer pontos;
     @Column(name = "qtd_moradores")
-    private Integer qtdMoradores;
+    private Integer qtdMoradores = 1;
     @Column(name = "identificadorRes")
     private String identificadorRes;
     @Enumerated(EnumType.STRING)

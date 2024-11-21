@@ -2,61 +2,127 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml"
       lang="pt-br">
 
-<head th:replace="~{fragments::head(#{home.title})}">
-    <!--  <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">-->
-</head>
-<body th:object="${user}">
-    <header th:replace="~{fragments::header('home')}"></header>
+<head th:replace="~{fragments::head(#{home.title})}"></head>
 
-    <div th:if="${successUpdate}" class="alert alert-success" role="alert">
-        <span th:text="#{success.update}">Sucesso!</span>
-    </div>
+<body th:object="${user}">
+<header th:replace="~{fragments::header('home')}"></header>
+
+<div th:if="${successUpdate}" class="alert alert-success" role="alert">
+    <span th:text="#{success.update}">Sucesso!</span>
+</div>
+<div class="alert alert-success" th:if="${messageAtiva}">
+    <span th:text="#{reactivate.account.success}">Conta Reativa com sucesso</span>
+</div>
+
+<div class="container mt-5" th:if="${user.status.toString() == 'ATIVO'}">
 
     <div class="container mt-5">
         <div class="text-center mb-4">
-            <h2 class="text-primary" th:text="#{home.welcome(*{nome})}"></h2>
+            <h2 class="text-info" th:text="#{home.welcome(*{nome})}"></h2>
         </div>
     </div>
 
     <div th:if="*{authUser.role.toString()=='USER'}" class="text-center mb-4">
-            <div >
-                <a th:href="@{/{id}/enviar-fatura(id=${user.id})}" class="btn btn-info mb-3" th:text="#{home.add.fatura}"></a>
+        <div >
+            <a th:href="@{/{id}/faturas(id=${user.id})}" class="btn btn-info text-center" th:text="#{home.listar.faturas}">listar.faturas</a>
+        </div>
+<!--        <div class="text-center mt-4">-->
+<!--            <a th:href="@{/{id}/resgatar-bonus(id=${user.condominio.id})}" class="btn btn-warning" th:text="#{home.bonus.disponiveis}">bonus disponiveis</a>-->
+<!--        </div>-->
+        <div class="col-12 d-flex justify-content-center mt-4">
+            <script th:inline="javascript">
+                /*<![CDATA[*/
+                var confirmMessage = /*[[#{home.confirm.excluir}]]*/ 'Tem certeza que deseja desativar sua conta?';
+                /*]]>*/
+            </script>
+            <form method="post" th:action="@{/{id}/desativar-conta(id=${user.id})}" onsubmit="return confirm(confirmMessage);">
+                <button type="submit" class="btn btn-danger" th:text="#{home.desativar.conta}">Desativar conta</button>
+            </form>
+        </div>
+    </div>
 
-                <a th:href="@{/{id}/faturas(id=${user.id})}" class="btn btn-info mb-3" th:text="#{home.listar.faturas}"></a>
+    <div th:if="*{authUser.role.toString()=='ADMIN'}" class="text-center mt-4">
+        <div class="text-center mt-4">
+            <a th:href="@{/{id}/moradores(id=${user.condominio.id})}" class="btn btn-info" th:text="#{home.listar.moradores}">Listar moradores</a>
+        </div>
+        <div class="text-center mt-4">
+            <a th:href="@{|/{idMorador}/{idCondominio}/adicionar-bonus|(idCondominio=${user.condominio.id}, idMorador =${user.id})}" class="btn btn-info" th:text="#{home.add.bonus}">Adicionar bonus</a>
+        </div>
+    </div>
 
+    <div th:if="*{authUser.role.toString()=='MANAGER'}" class="text-center mt-4">
+        <div class="text-center mt-4">
+            <a th:href="@{/condominios}" class="btn btn-info" th:text="#{home.listar.condominios}">Listar Condomínio</a>
+        </div>
+        <div class="text-center mt-4">
+            <a th:href="@{/add-condominio}" class="btn btn-info" th:text="#{home.add.condominios}">Adicionar Condomínio</a>
+        </div>
+    </div>
+
+    <div class="text-center mt-4">
+        <a th:href="@{/{id}/details-perfil(id=${user.id})}" class="btn btn-info" th:text="#{home.details.profile}">Ver Perfil</a>
+    </div>
+
+    <div class="text-center mt-4">
+        <a th:if="*{authUser.role.toString()=='ADMIN' || authUser.role.toString()=='USER'}"
+           th:href="@{/{id}/atualizar-perfil(id=${user.id})}"
+           class="btn btn-primary"
+           th:text="#{edit.profile}"
+        >
+            Editar
+        </a>
+        <a th:href="@{/chat_gpt}" class="btn btn-warning" th:text="#{home.gpt}"></a>
+
+        <div class="text-center mt-4">
+            <a class="btn btn-info"
+               th:href="@{|/{idMorador}/{idCondominio}/bonus-disponiveis|(idCondominio=${user.condominio.id}, idMorador=${user.id})}"
+               th:text="#{home.listar.bonus}">Listar bonus</a>
+        </div>
+    </div>
+</div>
+
+<div class="container mt-5" th:if="${user.status.toString() == 'INATIVO'}">
+    <div class="card shadow-sm">
+        <div class="card-header bg-warnig text-black">
+            <h4 class="card-title mb-0" th:text="#{reactivate.modal.title}">Reativar</h4>
+        </div>
+
+        <div class="card-body">
+
+            <div>
+                <p th:text="#{reactivate}">Sua conta está inativa. Deseja reativá-la agora?</p>
+                <!-- Botão que ativa o modal -->
+                <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#reativarContaModal" th:text="#{reactivate.account}">
+                    Ativar Conta
+                </button>
             </div>
-            <div class="col-12 d-flex justify-content-center mt-4">
-                <script th:inline="javascript">
-                    /*<![CDATA[*/
-                    var confirmMessage = /*[[#{home.confirm.excluir}]]*/ 'Tem certeza que deseja desativar sua conta?';
-                    /*]]>*/
-                </script>
-                <form method="post" th:action="@{/{id}/desativar-conta(id=${user.id})}" onsubmit="return confirm(confirmMessage);">
-                    <button type="submit" class="btn btn-danger" th:text="#{home.desativar.conta}">Desativar conta</button>
-                </form>
+
+            <!-- Modal -->
+            <div class="modal fade" id="reativarContaModal" tabindex="-1" aria-labelledby="reativarContaLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="reativarContaLabel" th:text="#{reactivate.modal.title}">Reativar Conta</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body" th:text="#{reactivate.modal.confirm}">
+                            Ativar conta?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" th:text="#{reactivate.modal.cancel}">Cancelar</button>
+                            <form method="get" th:action="@{/{id}/ativar-conta(id=${user.id})}">
+                                <button type="submit" class="btn btn-primary" th:text="#{reactivate.modal.confirm.button}">Reativar</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
-    <div th:if="*{authUser.role.toString()=='ADMIN' || authUser.role.toString()=='MANAGER'}" class="text-center mt-4">
-        <a th:href="@{/all/moradores}" class="btn btn-primary" th:text="#{home.listar.moradores}">Listar moradores</a>
-        <a th:href="@{/adicionar-bonus}" class="btn btn-warning mb-3" th:text="#{home.bonus.disponiveis}">Adicionar bonus</a>
-    </div>
-
-    <div th:if="*{authUser.role.toString()=='MANAGER'}" class="text-center mt-4">
-        <a th:href="@{/all/condominios}" class="btn btn-primary" th:text="#{home.listar.condominios}">Listar Condomínio</a>
-    </div>
-
-    <div class="text-center mt-4">
-        <a th:href="@{/bonus-disponiveis}" class="btn btn-warning mb-3" th:text="#{home.bonus.disponiveis}">bonus.disponiveis</a>
-    </div>
-
-    <div class="text-center mt-4">
-        <a th:href="@{/{id}/atualizar-perfil(id=${user.id})}" class="btn btn-primary mb-3" th:text="#{home.atualizar_perfil}"></a>
-        <a th:href="@{/chat_gpt}" class="btn btn-warning mb-3" th:text="#{home.gpt}"></a>
-
-    </div>
+</div>
 
 <footer th:replace="~{fragments::footer}"></footer>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

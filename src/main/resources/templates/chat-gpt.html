@@ -1,0 +1,32 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml"
+      lang="pt-br">
+
+<head th:replace="~{fragments::head(#{chat.gpt.title})}"></head>
+
+<body >
+<header th:replace="~{fragments::header('chat-gpt')}"></header>
+<div class="container mt-5">
+  <div class="text-center mb-4">
+    <h1 th:text="#{help}"><b>Em que posso ajudar?</b></h1>
+  </div>
+  <div class="card p-4 shadow-sm">
+    <form th:action="@{/pergunta_chat_gpt}" method="post">
+      <div class="form-group">
+        <label for="pergunta" th:text="#{pergunta.label}">Escreva sua pergunta:</label>
+        <input class="form-control" type="text" name="pergunta" id="pergunta" th:placeholder="#{pergunta.placeholder}">
+      </div>
+      <div class="form-group">
+        <p th:text="${resposta}" class="text-success font-weight-bold"></p>
+      </div>
+      <button type="submit" class="btn btn-info btn-block" th:text="#{question}">Perguntar</button>
+    </form>
+
+    <div class="row">
+      <a href="/home" class="btn btn-link" th:text="#{return.initial}">Retorne para a home</a>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

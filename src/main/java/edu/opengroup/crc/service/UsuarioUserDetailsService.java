@@ -31,11 +31,11 @@ public class UsuarioUserDetailsService implements UserDetailsService {
         Auth resgatado = uRep.findByEmail(email).orElseThrow(
                 () -> new UsernameNotFoundException("Usuário " + email + " não encontrado na base de dados"));
 
-        // Verifica se o usuário está ativo
-        var user = userRepo.findByAuthUser(resgatado);
-        if (user.getStatus().equals(Status.INATIVO)) {
-            throw new UsernameInactiveException("Usuário " + email + " não está ativo");
-        }
+//        // Verifica se o usuário está ativo
+//        var user = userRepo.findByAuthUser(resgatado);
+//        if (user.getStatus().equals(Status.INATIVO)) {
+//            throw new UsernameInactiveException("Usuário " + email + " não está ativo");
+//        }
 
         return new User(
                 resgatado.getEmail(),

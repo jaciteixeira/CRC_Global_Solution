@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments::head(#{list.residents})}"></head>
+<body>
+<header th:replace="~{fragments::header('moradores')}"></header>
+
+<div class="container mt-5">
+    <h1 class="text-center" th:text="#{condominio.residents.title} + ' ' + ${condominio.nome}">
+        Moradores do Condomínio
+    </h1>
+    <hr>
+
+    <!-- Tabela de Moradores -->
+    <div class="table-responsive mt-4">
+        <table class="table table-bordered table-striped">
+            <thead>
+            <tr>
+                <th th:text="#{morador.nome}">Nome</th>
+                <th th:text="#{email}">Email</th>
+                <th th:text="#{profile.points}">Pontos</th>
+                <th th:text="#{status}">Status</th>
+                <th></th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+
+            <tr th:if="${moradores.isEmpty()}">
+                <td colspan="4" class="no-files" th:text="#{moradores.empty}">Nenhum morador encontrado.</td>
+            </tr>
+
+            <tr th:each="morador : ${moradores}">
+                <td th:text="${morador.nome}">[Nome do Morador]</td>
+                <td th:text="${morador.authUser.email}">[Email do Morador]</td>
+                <td th:text="${morador.pontos}">[Pontos do Morador]</td>
+                <td th:text="${morador.status}">[Status]</td>
+                <td >
+                    <a th:if="${morador.status.toString() == 'INATIVO' }"
+                        th:href="@{/{id}/ativar-conta(id=${morador.id})}"
+                        class="btn btn-link text-warning">
+                        Ativar
+                    </a>
+                </td>
+                <td>
+                    <form method="post" th:action="@{/{id}/remover-morador(id=${morador.id})}" >
+                        <button type="submit" class="btn btn-danger" th:text="#{excluir.conta}">Excluir morador</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Botão Voltar -->
+    <div class="mt-4">
+        <a th:href="@{/}" class="btn btn-secondary text-start" th:text="#{return.initial}">Voltar para a Home</a>
+    </div>
+</div>
+
+<footer th:replace="~{fragments::footer}"></footer>
+</body>
+</html>

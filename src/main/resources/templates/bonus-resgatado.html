@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head th:replace="~{fragments::head(#{list.bonus.title})}"></head>
+<body>
+<header th:replace="~{fragments::header('resgatar-bonus')}"></header>
+
+<div class="container mt-5">
+  <div class="card shadow-sm">
+    <div class="card-header bg-info text-white">
+      <h4 class="card-title mb-0" th:text="#{registe.bonus.title}">Resgate de Bônus</h4>
+    </div>
+
+    <div class="card-body">
+
+      <h1 th:text="#{parabens}">Parabéns, <strong th:text="${morador.nome}"></strong>!</h1>
+      <p th:text="#{resgate.bonus}">Você resgatou o bônus: <strong th:text="${bonus.nome}"></strong>.</p>
+      <p th:text="#{descricao}">Descrição: <span th:text="${bonus.descricao}"></span></p>
+      <p th:text="#{bonus.custo}">Custo: <span th:text="${bonus.custo}"></span></p>
+      <p th:text="#{condominio}">Condomínio: <span th:text="${condominio.nome}"></span></p>
+      <form method="get" th:action="@{|/{idMorador}/{idCondominio}/bonus-disponiveis|(idCondominio=${morador.condominio.id}, idMorador=${morador.id})}">
+        <button type="submit" class="btn btn-primary" th:text="#{return.list.bonus}">Reativar</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

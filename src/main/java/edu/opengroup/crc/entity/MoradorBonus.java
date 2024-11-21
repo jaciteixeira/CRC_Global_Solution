@@ -3,27 +3,32 @@ package edu.opengroup.crc.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-@Entity
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
-@Table(name = "T_OP_CRC_ASSOCIACAO_MORADOR_BONUS")
+@Entity
+@Table(name = "T_OP_CRC_MORADOR_BONUS")
 public class MoradorBonus {
-
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SQ_CRC_ASSOCIACAO")
-    @SequenceGenerator(name = "SQ_CRC_ASSOCIACAO", sequenceName = "SQ_CRC_ASSOCIACAO", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SQ_CRC_MORADOR_BONUS")
+    @SequenceGenerator(name = "SQ_CRC_MORADOR_BONUS", sequenceName = "SQ_CRC_MORADOR_BONUS", allocationSize = 1)
+    @Column(name = "ID_MORADOR_BONUS")
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "ID_MORADOR", nullable = false, foreignKey = @ForeignKey(name = "FK_MORADOR_ASSOCIACAO"))
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(
+            name = "ID_MORADOR",
+            referencedColumnName = "ID_MORADOR",
+            foreignKey = @ForeignKey(name = "FK_MORADOR_BONUS_MORADOR")
+    )
     private Morador morador;
 
-    @ManyToOne
-    @JoinColumn(name = "ID_BONUS", nullable = false, foreignKey = @ForeignKey(name = "FK_BONUS_ASSOCIACAO"))
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(
+            name = "ID_BONUS",
+            referencedColumnName = "ID_BONUS",
+            foreignKey = @ForeignKey(name = "FK_MORADOR_BONUS_BONUS")
+    )
     private Bonus bonus;
-
-    @Column(name = "QTD", nullable = false)
-    private Integer qtd;
 }

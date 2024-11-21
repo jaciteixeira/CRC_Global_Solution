@@ -1,0 +1,84 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml"
+      lang="pt-br">
+
+<head th:replace="~{fragments::head(#{register.condominio.title})}">
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<header th:replace="~{fragments::header('add-condominio')}"></header>
+
+<article class="container mt-5">
+  <div class="card shadow-sm">
+    <div class="card-header bg-info text-white">
+      <h4 class="card-title mb-0" th:text="#{register.condominio.title}">Registrar Condominio</h4>
+    </div>
+    <div class="card-body">
+      <form th:object="${condominioRequest}" th:action="@{/add-condominio}" method="post">
+
+        <div class="mb-3">
+          <label for="nome" class="form-label" th:text="#{profile.name}">Nome</label>
+          <input type="text" class="form-control" id="nome"
+                 th:field="*{nome}" th:errorclass="is-invalid">
+          <div class="invalid-feedback" th:errors="*{nome}"></div>
+        </div>
+
+        <div class="mb-3">
+          <label for="cep" class="form-label" th:text="#{cep}">CEP</label>
+          <input type="text" class="form-control" id="cep"
+                 th:field="*{cep}" th:errorclass="is-invalid">
+          <div class="invalid-feedback" th:errors="*{cep}"></div>
+        </div>
+
+        <div class="mb-3">
+          <label for="logradouro" class="form-label" th:text="#{logradouro}">Logradouro</label>
+          <input type="text" class="form-control" id="logradouro"
+                 th:field="*{logradouro}" th:errorclass="is-invalid">
+          <div class="invalid-feedback" th:errors="*{logradouro}"></div>
+        </div>
+
+        <div class="mb-3">
+          <label for="numero" class="form-label" th:text="#{number}">Numero</label>
+          <input type="text" class="form-control" id="numero"
+                 th:field="*{numero}" th:errorclass="is-invalid">
+          <div class="invalid-feedback" th:errors="*{numero}"></div>
+        </div>
+
+        <div class="mb-3">
+          <label for="bairro" class="form-label" th:text="#{bairro}">Bairro</label>
+          <input type="text" class="form-control" id="bairro"
+                 th:field="*{bairro}" th:errorclass="is-invalid">
+          <div class="invalid-feedback" th:errors="*{bairro}"></div>
+        </div>
+
+        <div class="mb-3">
+          <label for="cidade" class="form-label" th:text="#{city}">Cidade</label>
+          <input type="text" class="form-control" id="cidade"
+                 th:field="*{cidade}" th:errorclass="is-invalid">
+          <div class="invalid-feedback" th:errors="*{bairro}"></div>
+        </div>
+
+        <div class="mb-3">
+          <label for="uf" class="form-label" th:text="#{uf}">UF</label>
+          <input type="text" class="form-control" id="uf"
+                 th:field="*{uf}" th:errorclass="is-invalid">
+          <div class="invalid-feedback" th:errors="*{uf}"></div>
+        </div>
+
+        <!-- Botão de Enviar -->
+        <div class="d-flex justify-content-between align-items-center">
+          <button type="submit" class="btn btn-info text-end" th:text="#{send}">Enviar</button>
+          <a href="/" class="btn btn-link text-decoration-none text-start" th:text="#{return.initial}">
+            Retorne para a página inicial
+          </a>
+        </div>
+      </form>
+    </div>
+  </div>
+</article>
+<footer th:replace="~{fragments::footer}"></footer>
+<!-- Bootstrap JS Bundle -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

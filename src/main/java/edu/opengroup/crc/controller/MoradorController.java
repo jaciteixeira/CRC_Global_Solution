@@ -3,14 +3,12 @@ package edu.opengroup.crc.controller;
 import edu.opengroup.crc.entity.*;
 import edu.opengroup.crc.entity.dto.MoradorRequest;
 import edu.opengroup.crc.entity.dto.MoradorRequestUpdate;
+import edu.opengroup.crc.exception.ResourceNotFoundException;
 import edu.opengroup.crc.repository.AuthRepository;
 import edu.opengroup.crc.repository.CondominioRepository;
 import edu.opengroup.crc.repository.MoradorRepository;
 import jakarta.servlet.http.HttpSession;
-import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Valid;
-import jakarta.validation.Validation;
-import jakarta.validation.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.Authentication;
@@ -18,14 +16,12 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 @Controller
 public class MoradorController {
@@ -38,8 +34,6 @@ public class MoradorController {
     CondominioRepository condominioRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
-//    @Autowired
-//    private OpenAiChatClient openAiChatClient;
 
     @GetMapping("/new-user")
     public ModelAndView viewNewUser(HttpSession session) {
@@ -60,7 +54,6 @@ public class MoradorController {
             BindingResult bindingResult,
             RedirectAttributes redirectAttributes) {
 
-        System.out.println("Morador Request: " + moradorRequest);
         // Verifica se o e-mail já existe
         var auth = authRepository.findByEmail(moradorRequest.email());
         if (auth.isPresent()) {
@@ -81,6 +74,7 @@ public class MoradorController {
         // Define a Role com base no e-mail
         Role role = (moradorRequest.email().contains("@opengroup")) ? Role.ADMIN : Role.USER;
 
+
         // Cria o objeto Morador
         var morador = Morador.builder()
                 .nome(moradorRequest.nome())
@@ -89,12 +83,17 @@ public class MoradorController {
                 .qtdMoradores(moradorRequest.qtdMoradores())
                 .identificadorRes(moradorRequest.identificadorRes())
                 .status(Status.ATIVO)
+                .pontos(0)
                 .authUser(Auth.builder()
                         .email(moradorRequest.email())
                         .hashSenha(passwordEncoder.encode(moradorRequest.senha()))
                         .role(role)
                         .build())
                 .build();
+
+        if (moradorRequest.identificadorRes() == null){
+            morador.setIdentificadorRes("N/A");
+        }
 
         // Tenta salvar o Morador
         try {
@@ -111,23 +110,6 @@ public class MoradorController {
         return new ModelAndView("redirect:/login");
     }
 
-    @PostMapping("/{id}/desativar-conta")
-    public String desativarConta(@PathVariable Long id,
-                                 HttpSession session,
-                                 RedirectAttributes redirectAttributes) {
-        try {
-            var morador = moradorRepository.findById(id).orElse(null);
-            if (morador != null) {
-                morador.setStatus(Status.INATIVO);
-                moradorRepository.save(morador);
-            }
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("errorDesable", "Erro ao desativar conta. "+e.getMessage());
-            return "/home";
-        }
-        return "redirect:/logout";
-    }
-
     @GetMapping("/{id}/atualizar-perfil")
     public ModelAndView viewAtualizaPerfil(@PathVariable Long id) {
         Morador morador = moradorRepository.findById(id).get();
@@ -140,16 +122,17 @@ public class MoradorController {
     @PostMapping("/{id}/atualizar-perfil")
     public ModelAndView atualizaPerfil(@PathVariable Long id,
                                        @Valid MoradorRequestUpdate moradorUpdate,
-                                       BindingResult bindingResult){
+                                       BindingResult bindingResult,
+                                       RedirectAttributes redirectAttributes){
         Morador morador = moradorRepository.findById(id).orElse(null);
+        assert morador != null;
 
         if (bindingResult.hasErrors()) {
             return new ModelAndView("profile_update")
                     .addObject("morador", morador)
-                    .addObject("condominios", condominioRepository.findAll())
-                    .addObject("moradorRequest", new MoradorRequest("","","","",null,"",null));
+                    .addObject("moradorRequest", moradorUpdate);
         }
-        assert morador != null;
+
         Auth auth = morador.getAuthUser();
         auth.setHashSenha(passwordEncoder.encode(moradorUpdate.senha()));
 
@@ -160,9 +143,93 @@ public class MoradorController {
         try {
             moradorRepository.save(morador);
         }catch (DataIntegrityViolationException e){
-            bindingResult.reject("error.morador", ""+e.getMostSpecificCause().getMessage());
+            bindingResult.reject("nome", ""+e.getMostSpecificCause().getMessage());
         }
-        return new ModelAndView("redirect:/home")
-                .addObject("sucessMessage", "Atualizado com sucesso.");
+        redirectAttributes.addFlashAttribute("successUpdate", "Atualizado com sucesso.");
+        return new ModelAndView("redirect:/home");
     }
+
+    @GetMapping("/{id}/details-perfil")
+    public ModelAndView viewDetailsPerfil(@PathVariable Long id) {
+        Morador morador = moradorRepository.findById(id).orElse(null);
+        return new ModelAndView("details-profile")
+                .addObject("morador", morador);
+
+    }
+
+    @GetMapping("/{id}/moradores")
+    public ModelAndView listarMoradores(@PathVariable("id") Long id) {
+        // Buscar o condomínio pelo ID
+        var condominio = condominioRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Condomínio não encontrado"));
+
+        // Buscar os moradores associados ao condomínio
+        var moradores = moradorRepository.findByCondominioId(id);
+        Iterator<Morador> iterator = moradores.iterator();
+        while (iterator.hasNext()) {
+            Morador morador = iterator.next();
+            if(morador.getAuthUser().getRole() == Role.ADMIN) {
+                iterator.remove();
+            }
+        }
+
+        // Retornar a view com os moradores
+        return new ModelAndView("moradores")
+                .addObject("condominio", condominio)
+                .addObject("moradores", moradores);
+    }
+
+    @PostMapping("/{id}/remover-morador")
+    public ModelAndView removeMorador(@PathVariable("id")Long id){
+        Morador morador = moradorRepository.findById(id).orElse(null);
+        if (morador != null) {
+            moradorRepository.delete(morador);
+        }
+        return new ModelAndView("redirect:/"+id+"/moradores");
+    }
+
+    @PostMapping("/{id}/desativar-conta")
+    public ModelAndView desativarConta(@PathVariable Long id,
+                                       HttpSession session,
+                                       RedirectAttributes redirectAttributes){
+        Morador morador = moradorRepository.findById(id).orElse(null);
+        try {
+            if (morador != null) {
+                morador.setStatus(Status.INATIVO);
+                moradorRepository.save(morador);
+                SecurityContextHolder.clearContext(); // Limpa o contexto de segurança
+                session.invalidate(); // Invalida a sessão
+                redirectAttributes.addFlashAttribute("message_desativo", "Conta desativada com sucesso.");
+
+            }
+        }catch (Exception e) {
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("message_desativo", "Erro ao excluir conta. "+e.getMessage());
+            return new ModelAndView("/home");
+        }
+        return new ModelAndView("redirect:/logout");
+    }
+
+    @GetMapping("/{id}/ativar-conta")
+    public ModelAndView ativarConta(@PathVariable Long id,
+                                    RedirectAttributes redirectAttributes){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        assert auth != null;
+        var authUser = authRepository.findByEmail(auth.getName());
+        var moradorAutenticado = moradorRepository.findByAuthUser(authUser.get());
+
+        Morador morador = moradorRepository.findById(id).orElse(null);
+        if (morador != null) {
+            morador.setStatus(Status.ATIVO);
+            moradorRepository.save(morador);
+        }
+        if (moradorAutenticado != null && moradorAutenticado.getAuthUser().getRole() == Role.USER) {
+            redirectAttributes.addFlashAttribute("messageAtiva", "Conta ativada com sucesso");
+            return new ModelAndView("home")
+                    .addObject("user", morador);
+        }
+        return new ModelAndView( "redirect:/"+id+"/moradores");
+    }
+
+
 }
