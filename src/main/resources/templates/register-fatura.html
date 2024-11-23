@@ -18,7 +18,7 @@
       <form th:object="${consumoRequest}" th:action="@{/{id}/enviar-fatura(id=${morador.id})}" method="post">
         <!-- Campo de Quantidade -->
         <div class="mb-3">
-          <label for="quantidadeConsumida" class="form-label" th:text="#{quantidade}">Quantidade</label>
+          <label for="quantidadeConsumida" class="form-label" th:text="#{quantidade.consumida}">Quantidade</label>
           <input type="number" class="form-control" id="quantidadeConsumida"
                  th:field="*{quantidadeConsumida}" th:errorclass="is-invalid">
           <div class="invalid-feedback" th:errors="*{quantidadeConsumida}"></div>

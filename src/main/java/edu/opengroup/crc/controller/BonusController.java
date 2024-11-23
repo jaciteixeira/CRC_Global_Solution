@@ -88,22 +88,20 @@ public class BonusController {
 
         if (morador.getPontos() >= bonus.getCusto()){
 
-            morador.setPontos(morador.getPontos() - bonus.getCusto());
-            moradorRepository.save(morador);
-
-            MoradorBonus moradorBonus = new MoradorBonus();
-            moradorBonus.setMorador(morador);
-            moradorBonus.setBonus(bonus);
-            moradorBonusRepository.save(moradorBonus);
-
-            bonus.setQuantidade(quantidadeDisponivel - 1);
-            bonusRepository.save(bonus);
+//            morador.setPontos(morador.getPontos() - bonus.getCusto());
+//            moradorRepository.save(morador);
+//
+//            MoradorBonus moradorBonus = new MoradorBonus();
+//            moradorBonus.setMorador(morador);
+//            moradorBonus.setBonus(bonus);
+//            moradorBonusRepository.save(moradorBonus);
+//
+//            bonus.setQuantidade(quantidadeDisponivel - 1);
+//            bonusRepository.save(bonus);
 
             rabbitTemplate.convertAndSend(RabbitMQConfig.roteador,
                     RabbitMQConfig.chave_rota,
                     bonus.getNome());
-
-
         }
         else {
             redirectAttributes.addFlashAttribute("bonusInsuficiente", "Bonus insuficiente");

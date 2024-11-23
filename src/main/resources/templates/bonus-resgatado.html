@@ -12,16 +12,29 @@
 
     <div class="card-body">
 
-      <h1 th:text="#{parabens}">Parabéns, <strong th:text="${morador.nome}"></strong>!</h1>
-      <p th:text="#{resgate.bonus}">Você resgatou o bônus: <strong th:text="${bonus.nome}"></strong>.</p>
-      <p th:text="#{descricao}">Descrição: <span th:text="${bonus.descricao}"></span></p>
-      <p th:text="#{bonus.custo}">Custo: <span th:text="${bonus.custo}"></span></p>
-      <p th:text="#{condominio}">Condomínio: <span th:text="${condominio.nome}"></span></p>
-      <form method="get" th:action="@{|/{idMorador}/{idCondominio}/bonus-disponiveis|(idCondominio=${morador.condominio.id}, idMorador=${morador.id})}">
-        <button type="submit" class="btn btn-primary" th:text="#{return.list.bonus}">Reativar</button>
-      </form>
+      <h1>
+        <span th:text="#{parabens}"></span>, <strong th:text="${morador.nome}"></strong>!
+      </h1>
+      <p>
+        <span th:text="#{resgate.bonus}"></span> <strong th:text="${bonus.nome}"></strong>.
+      </p>
+      <p>
+        <span th:text="#{descricao}">Descrição:</span> <strong th:text="${bonus.descricao}"></strong>
+      </p>
+      <p>
+        <span th:text="#{bonus.custo}">Custo:</span> <strong th:text="${bonus.custo}"></strong>
+      </p>
+      <p>
+        <span th:text="#{condominio}">Condomínio:</span> <strong th:text="${condominio.nome}"></strong>>
+      </p>
+      <p><strong>Retire-o no local de troca de seu condominio!</strong></p>
+      <a th:href="@{|/{idMorador}/{idCondominio}/bonus-disponiveis|(idCondominio=${morador.condominio.id}, idMorador=${morador.id})}"
+         class="btn btn-info"
+         th:text="#{return.list.bonus}">
+      </a>
     </div>
   </div>
+
 </div>
 
 </body>

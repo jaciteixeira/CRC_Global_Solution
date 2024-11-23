@@ -1,0 +1,3 @@
+Código fonte do software: https://github.com/jaciteixeira/CRC_Global_Solution
+Vídeo Pitch: https://youtu.be/zMBhPeODCXY?si=T-pDe19KDKk6KyFn
+Vídeo demonstrando o software: https://youtu.be/HLk9cWlZ-tc

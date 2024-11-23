@@ -42,6 +42,14 @@ public class MoradorController {
         }
 
         List<Condominio> condominios = condominioRepository.findAll();
+        Iterator<Condominio> iterator = condominios.iterator();
+        while (iterator.hasNext()) {
+            Condominio condominio = iterator.next();
+            if(condominio.getNome().equals("MANAGER")){
+                iterator.remove();
+            }
+        }
+        System.out.println("Lista condominios: "+condominios);
 
         return new ModelAndView("register-user")
                 .addObject("moradorRequest", new MoradorRequest("","","","",null,"",null))

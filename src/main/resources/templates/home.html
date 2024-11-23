@@ -26,19 +26,6 @@
         <div >
             <a th:href="@{/{id}/faturas(id=${user.id})}" class="btn btn-info text-center" th:text="#{home.listar.faturas}">listar.faturas</a>
         </div>
-<!--        <div class="text-center mt-4">-->
-<!--            <a th:href="@{/{id}/resgatar-bonus(id=${user.condominio.id})}" class="btn btn-warning" th:text="#{home.bonus.disponiveis}">bonus disponiveis</a>-->
-<!--        </div>-->
-        <div class="col-12 d-flex justify-content-center mt-4">
-            <script th:inline="javascript">
-                /*<![CDATA[*/
-                var confirmMessage = /*[[#{home.confirm.excluir}]]*/ 'Tem certeza que deseja desativar sua conta?';
-                /*]]>*/
-            </script>
-            <form method="post" th:action="@{/{id}/desativar-conta(id=${user.id})}" onsubmit="return confirm(confirmMessage);">
-                <button type="submit" class="btn btn-danger" th:text="#{home.desativar.conta}">Desativar conta</button>
-            </form>
-        </div>
     </div>
 
     <div th:if="*{authUser.role.toString()=='ADMIN'}" class="text-center mt-4">
@@ -59,24 +46,40 @@
         </div>
     </div>
 
-    <div class="text-center mt-4">
-        <a th:href="@{/{id}/details-perfil(id=${user.id})}" class="btn btn-info" th:text="#{home.details.profile}">Ver Perfil</a>
-    </div>
-
-    <div class="text-center mt-4">
-        <a th:if="*{authUser.role.toString()=='ADMIN' || authUser.role.toString()=='USER'}"
-           th:href="@{/{id}/atualizar-perfil(id=${user.id})}"
+    <div class="text-center mt-4" th:if="*{authUser.role.toString()=='ADMIN' || authUser.role.toString()=='USER'}">
+        <a th:href="@{/{id}/atualizar-perfil(id=${user.id})}"
            class="btn btn-primary"
            th:text="#{edit.profile}"
         >
             Editar
         </a>
-        <a th:href="@{/chat_gpt}" class="btn btn-warning" th:text="#{home.gpt}"></a>
+
 
         <div class="text-center mt-4">
             <a class="btn btn-info"
                th:href="@{|/{idMorador}/{idCondominio}/bonus-disponiveis|(idCondominio=${user.condominio.id}, idMorador=${user.id})}"
                th:text="#{home.listar.bonus}">Listar bonus</a>
+        </div>
+    </div>
+
+    <div class="text-center mt-4">
+        <a th:href="@{/{id}/details-perfil(id=${user.id})}" class="btn btn-info" th:text="#{home.details.profile}">Ver Perfil</a>
+    </div>
+
+    <div class="text-center mt-4">
+        <a th:href="@{/chat_gpt}" class="btn btn-warning" th:text="#{home.gpt}"></a>
+    </div>
+
+    <div th:if="*{authUser.role.toString()=='USER'}" class="text-center mb-4">
+        <div class="col-12 d-flex justify-content-center mt-4">
+            <script th:inline="javascript">
+                /*<![CDATA[*/
+                var confirmMessage = /*[[#{home.confirm.excluir}]]*/ 'Tem certeza que deseja desativar sua conta?';
+                /*]]>*/
+            </script>
+            <form method="post" th:action="@{/{id}/desativar-conta(id=${user.id})}" onsubmit="return confirm(confirmMessage);">
+                <button type="submit" class="btn btn-danger" th:text="#{home.desativar.conta}">Desativar conta</button>
+            </form>
         </div>
     </div>
 </div>

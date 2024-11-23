@@ -66,9 +66,9 @@
 
       <!-- Confirmação de Senha -->
       <div class="mb-3">
-          <label for="confirmarSenha" class="form-label">Confirme sua Senha</label>
+          <label for="confirmarSenha" class="form-label" th:text="#{confirm.password}">Confirme sua Senha</label>
           <input type="password" class="form-control" id="confirmarSenha" oninput="verificarSenha()">
-          <div class="invalid-feedback" id="erroSenha" style="display: none;" th:text="#{confirm.password}">As senhas não coincidem.</div>
+          <div class="invalid-feedback" id="erroSenha" style="display: none;" th:text="#{password.match}">As senhas não coincidem.</div>
       </div>
 
       <button type="submit" class="btn btn-info" id="btnCadastrar" disabled th:text="#{register}">Cadastrar</button>
